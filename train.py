@@ -60,6 +60,8 @@ def train():
     loader = DataLoader(train_dataset, hparams.batch_size, shuffle=True)
     criterion = CrossEntropyLoss()
 
+    valid_best_f1 = 0
+
     for epoch in range(hparams.max_epoch):
         for i, batch in enumerate(tqdm(loader, desc=f'Train epoch #{epoch}')):
             pred = model(batch['mfcc'])
@@ -122,6 +124,10 @@ def train():
                            'recall': torch.mean(recall),
                            'valid_f1': torch.mean(f1_score)},
                           step=len(loader) * (epoch + 1) - 1)
+                if valid_best_f1 < torch.mean(f1_score):
+                    valid_best_f1 = torch.mean(f1_score)
+                    torch.save(model.state_dict(),
+                               str(Path(wandb.run.dir) / 'model-best.pt'))
             model.train()
 
         if epoch % hparams.checkpoint_interval == 0:
