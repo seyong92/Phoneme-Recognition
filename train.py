@@ -89,7 +89,7 @@ def train():
                 fn = torch.zeros(hparams.num_labels)
                 right = 0
                 wrong = 0
-                for j, valid_data in enumerate(tqdm(test_dataset, desc='Validation')):
+                for _, valid_data in enumerate(tqdm(test_dataset, desc='Validation')):
                     pred = model(valid_data['mfcc'].unsqueeze(0))
                     label = valid_data['label'].unsqueeze(0)
 
