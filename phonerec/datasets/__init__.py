@@ -1,1 +1,0 @@
-from .timit import Timit

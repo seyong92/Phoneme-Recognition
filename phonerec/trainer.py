@@ -1,11 +1,9 @@
 import sys
 
-import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from torch.optim import Adam, SGD
-import librosa
+from torch.optim import Adam
 from pathlib import Path
 from .. import utils as U
 from tqdm import tqdm

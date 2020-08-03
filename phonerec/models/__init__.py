@@ -1,1 +1,0 @@
-from .maxoutnet import MaxOutNet

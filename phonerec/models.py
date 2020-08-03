@@ -1,12 +1,9 @@
 import sys
 
-from hparams import ex_pc, model_config
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from pathlib import Path
-import json
 
 
 sys.path.insert(0, '../..')
@@ -19,11 +16,10 @@ class MaxOutNet(nn.Module):
             n_mfcc = 20
 
     """
-    def __init__(self, input_height, label_num, snapshot_path, device):
+    def __init__(self, input_height, label_num, device):
         super(MaxOutNet, self).__init__()
 
-        # model setting        
-        self.snapshot_path = snapshot_path
+        # model setting
         self.label_num = label_num
         self.device = device
 
@@ -44,16 +40,14 @@ class MaxOutNet(nn.Module):
         self.conv9 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True)
         # (N, 256, 18, 34)
 
-        self.fc1 = nn.Linear(256 * input_height * 3, 1024) # 256 * 18 * 3
+        self.fc1 = nn.Linear(256 * input_height * 3, 1024)  # 256 * 18 * 3
         self.fc2 = nn.Linear(1024, 1024)
         self.fc3 = nn.Linear(1024, label_num)
 
-    def save(self, state, suffix='_model.pt'):
-        fname = self.snapshot_path / (state + suffix)
-        print('Saving at', fname)
-
-        checkpoint = {'model': self.state_dict()}
-        torch.save(checkpoint, str(fname))
+    def save(self, filepath):
+        checkpoint = self.state_dict()
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(checkpoint, str(filepath))
 
     def forward(self, x):
         N = x.size(0)
@@ -79,7 +73,7 @@ class MaxOutNet(nn.Module):
             x_div = F.relu(self.fc1(x_div))
             x_div = F.relu(self.fc2(x_div))
             x_div = F.relu(self.fc3(x_div))
-            x_div = F.log_softmax(x_div, dim=1)
+            # x_div = F.log_softmax(x_div, dim=1)
             x_merge[:, :, m_idx - 1] = x_div
 
         return x_merge

@@ -1,3 +1,6 @@
 __pycache__
 .vscode
+resources
 @eaDir
+wandb
+.ipynb_checkpoints

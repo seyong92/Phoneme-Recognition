@@ -1,0 +1,5 @@
+TIMIT_PATH = '/media/dataset/bach-TIMIT/LDC93S1-TIMIT/'
+PREPROCESSED_DATA_PATH = '/media/dataset/TIMIT_preprocessed_39'
+LOGDIR_PRE = '/media/codes/Phoneme-Recognition/runs/classifier-'
+PHONESET_61 = 'timit61.phoneset'
+PHONESET_39 = 'timit39.phoneset'
