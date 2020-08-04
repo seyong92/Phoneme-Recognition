@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torch.nn import CrossEntropyLoss
 
 from phonerec.attrs import Attrs
-from phonerec import Timit, MaxOutNet
+from phonerec import Timit, ConvNet
 
 from tqdm import tqdm
 
@@ -47,8 +47,8 @@ def train():
                          hop_size=const.HOP_SIZE)
 
     # Create model and optimizer, and load parameter if we resume experiment.
-    model = MaxOutNet(hparams.input_height, hparams.num_labels,
-                      hparams.device).to(hparams.device)
+    model = ConvNet(const.N_MFCC, hparams.num_labels,
+                    hparams.device).to(hparams.device)
     optimizer = Adam(model.parameters(), hparams.learning_rate)
     if wandb.run.resumed:
         model.load_state_dict(str(Path(wandb.run.dir) / 'model-recent.pt'))
