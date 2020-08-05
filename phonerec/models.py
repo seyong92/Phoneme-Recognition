@@ -25,45 +25,54 @@ class ConvNet(nn.Module):
 
         self.cnn = nn.Sequential(
             # Layer 0 (N, 3, N_MFCC, L)
-            nn.Conv2d(in_channels=3, out_channels=128, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            nn.Conv2d(in_channels=3, out_channels=128, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            # Max Pooling (N, 128, N_MFCC, L)
             nn.MaxPool2d(kernel_size=(3, 1), stride=None, padding=0, dilation=1),
-            # Layer 1 (N, 128, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 1 (N, 128, stride_size, L)
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            # Layer 2 (N, 128, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 2 (N, 128, stride_size, L)
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            # Layer 3 (N, 128, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 3 (N, 128, stride_size, L)
+            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 4 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 4 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 5 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 5 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 6 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 6 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 7 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 7 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 8 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 8 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            # Layer 9 (N, 256, N_MFCC - 2, L)
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5), stride=1, padding=(1, 2), bias=True),
+            # Layer 9 (N, 256, stride_size, L)
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 5),
+                      stride=1, padding=(1, 2), bias=True),
             nn.BatchNorm2d(256),
             nn.ReLU(),
         )
