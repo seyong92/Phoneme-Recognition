@@ -1,4 +1,4 @@
-title = "MaxOutNet Phoneme Classifier"
+title = "CNN Phoneme Classifier"
 
 [CONSTANTS]
 DTYPE = "mfcc"
@@ -32,8 +32,7 @@ resume = false  # zero if train new model.
 
 num_labels = 39  # 61 or 39
 
-model_name = "MaxOutNet"
-input_height = 20
+model_name = "ConvNet"
 
 device = "cuda"
 
