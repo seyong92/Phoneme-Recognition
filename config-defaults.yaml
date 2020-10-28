@@ -1,0 +1,43 @@
+CONSTANTS:
+  desc: constant parameters for audio feature.
+  value:
+    DTYPE: "mfcc"
+    SAMPLE_RATE: 16000
+    HOP_SIZE: 512
+    N_FFT: 2048
+    N_MFCC: 20
+    N_MELS: 128
+
+PATHS:
+  desc: paths for dataset and labels
+  value:
+    TIMIT_PATH: '/media/dataset/bach-TIMIT/LDC93S1-TIMIT/'
+    PREPROCESSED_DATA_PATH: '/media/dataset/TIMIT_preprocessed_61_raw'
+    PHONESET_61: 'timit61.phoneset'
+    PHONESET_39: 'timit39.phoneset'
+
+HPARAMS:
+  desc: hyper parameters for model architecture.
+  value:
+    dataset_name: "Timit"
+
+    batch_size: 64
+    learning_rate: 0.0003
+    max_epoch: 10000
+    validation_interval: 10
+    checkpoint_interval: 10
+
+    chunk_len: 1  # in seconds
+
+    decay_steps: 10000
+    decay_rate: 0.97
+
+    resume: false  # zero if train new model.
+
+    num_labels: 61  # 61 or 39
+
+    model_name: "ConvNet"
+
+    device: "cuda:0"
+
+    seed: -1  # -1 for random seed.

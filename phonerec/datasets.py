@@ -1,16 +1,19 @@
 from pathlib import Path
 import torch
+from torch.nn.functional import pad
 # from .constants import SAMPLE_RATE, HOP_SIZE
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
 
 class Timit(Dataset):
-    def __init__(self, data_path, groups, device, sr, hop_size, chunk_len=None):
+    def __init__(self, data_path, groups, device, sr, hop_size, num_labels,
+                 chunk_len=None):
         self.groups = groups
         self.device = device
 
         self.data_path = data_path
+        self.num_labels = num_labels
         self.chunk_len = chunk_len
 
         self.sr = sr
@@ -30,10 +33,10 @@ class Timit(Dataset):
             for input_file in tqdm(self.files(group),
                                    desc=f'Loading group {group}'):
                 data = self.load(input_file)
-                if chunk_len is not None:  # protection code for short sample. should fix later
-                    num_frames = int((self.sr // self.hop_size) * self.chunk_len)
-                    if data['mfcc'].shape[-1] - num_frames <= 0:
-                        continue
+                # if chunk_len is not None:  # protection code for short sample. should fix later
+                #     num_frames = int((self.sr // self.hop_size) * self.chunk_len)
+                #     if data['mfcc'].shape[-1] - num_frames <= 0:
+                #         continue
                 self.data.append(data)
 
         print('TIMIT Dataset Loaded')
@@ -55,19 +58,29 @@ class Timit(Dataset):
         result = dict()
 
         if self.chunk_len is not None:
-            len_data = data['mfcc'].shape[-1]
+            len_data = data['audio'].shape[-1]
+            chunk_n_sample = int(self.chunk_len * self.sr)
 
-            num_frames = int((self.sr // self.hop_size) * self.chunk_len)
-            if (len_data - num_frames) <= 0:
-                step_begin = 0
-            else:
-                step_begin = int(torch.randint(0, len_data - num_frames, (1,)))
-            step_end = step_begin + num_frames
+            if len_data >= chunk_n_sample:  # case for long audio
+                begin = int(torch.randint(0, len_data - chunk_n_sample, (1, )))
+                end = begin + chunk_n_sample
 
-            result['mfcc'] = data['mfcc'][:, :, step_begin: step_end].to(self.device)
-            result['label'] = data['label'][:, step_begin: step_end].to(self.device)
+                result['audio'] = data['audio'][begin: end].to(self.device)
+                result['label'] = data['label'][begin: end].to(self.device)
+            else:  # case for short audio
+                if self.num_labels == 39:
+                    sil = 29
+                elif self.num_labels == 61:
+                    sil = 27
+
+                l_pad = int(torch.randint(0, chunk_n_sample - len_data, (1, )))
+                r_pad = chunk_n_sample - len_data - l_pad
+                result['audio'] = pad(data['audio'].to(self.device),
+                                      (l_pad, r_pad))
+                result['label'] = pad(data['audio'].to(self.device),
+                                      (l_pad, r_pad), value=sil)
         else:
-            result['mfcc'] = data['mfcc'].to(self.device)
+            result['audio'] = data['audio'].to(self.device)
             result['label'] = data['label'].to(self.device)
 
         return result
