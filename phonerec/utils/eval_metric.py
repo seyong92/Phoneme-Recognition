@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 from sklearn.metrics import f1_score
 
@@ -49,3 +50,31 @@ def accuracy(y_, y):
     acc = np.sum(y_mul_sum) / y_mul_sum.size
 
     return acc
+
+
+def eval_count(pred, lbl):
+
+    pred_reshape = torch.argmax(pred, dim=1)
+    num_labels = pred.size(1)
+    tp = torch.zeros(num_labels)
+    fp = torch.zeros(num_labels)
+    tn = torch.zeros(num_labels)
+    fn = torch.zeros(num_labels)
+    right = 0
+    wrong = 0
+
+    for i in range(len(pred_reshape)):
+        if pred_reshape[i] == lbl[i]:
+            tp[lbl[i]] += 1
+            tn += 1
+            tn[lbl[i]] -= 1
+            right += 1
+        else:
+            fp[int(pred_reshape[i])] += 1
+            fn[lbl[i]] += 1
+            tn += 1
+            tn[lbl[i]] -= 1
+            tn[int(pred_reshape[i])] -= 1
+            wrong += 1
+
+    return tp, fp, tn, fn, right, wrong

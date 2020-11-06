@@ -36,8 +36,19 @@ HPARAMS:
 
     num_labels: 61  # 61 or 39
 
-    model_name: "ConvNet"
+    model_name: "CRNN"
 
-    device: "cuda:0"
+    device: 0
 
     seed: -1  # -1 for random seed.
+
+TRAINER:
+  desc: parameters for trainer.
+  value:
+    gpus: [0]
+    max_epochs: 10000
+    auto_scale_batch_size: false
+    auto_select_gpus: false
+    auto_lr_find: true
+    benchmark: false
+    check_val_every_n_epoch: 10
